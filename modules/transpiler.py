@@ -42,9 +42,19 @@ class Transpiler:
         return f"std::cout << {node.var_name} << std::endl;"
 
     def transpile_operationnode(self, node: OperationNode) -> str:
-        left = self.transpile(node.left)
-        right = self.transpile(node.right)
+        if isinstance(node.left, ASTNode):
+            left = self.transpile(node.left)
+        else:
+            left = str(node.left)
+
+        if isinstance(node.right, ASTNode):
+            right = self.transpile(node.right)
+        else:
+            right = str(node.right)
+
         operator = node.operator
+        print(left, operator, right)
+        return ""
         return f"{left} {operator} {right};"
 
     def unsupported_node(self, node: ASTNode) -> str:

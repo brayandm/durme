@@ -53,9 +53,9 @@ if __name__ == "__main__":
         raise Exception("Error: The input file does not exist.")
 
     if not os.path.exists(args.output):
-        os.makedirs(os.path.dirname(args.output))
+        os.makedirs(os.path.dirname(args.output), exist_ok=True)
 
     if not os.path.exists(args.debug):
-        os.makedirs(args.debug)
+        os.makedirs(args.debug, exist_ok=True)
 
     main(args.input, args.output, args.debug)

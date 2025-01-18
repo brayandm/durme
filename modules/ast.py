@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 
 class ASTNode:
@@ -20,14 +20,18 @@ class ProgramNode(ASTNode):
 
 
 class DeclarationNode(ASTNode):
-    def __init__(self, var_type: str, var_name: str, value: int) -> None:
+    def __init__(self, var_type: str, var_name: str, value: ASTNode) -> None:
         self.var_type = var_type
         self.var_name = var_name
         self.value = value
 
     def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        return f"{indent}DeclarationNode: {self.var_type} {self.var_name} = {self.value}\n"
+        result = f"{indent}DeclarationNode:\n"
+        result += f"{indent}  Type: {self.var_type}\n"
+        result += f"{indent}  Name: {self.var_name}\n"
+        result += f"{indent}  {self.value.to_string(depth + 1)}\n"
+        return result
 
 
 class IfNode(ASTNode):
@@ -75,14 +79,26 @@ class PrintNode(ASTNode):
 
 
 class OperationNode(ASTNode):
-    def __init__(self, left: ASTNode, operator: str, right: ASTNode) -> None:
+    def __init__(
+        self,
+        left: Union[int, ASTNode],
+        operator: str,
+        right: Union[int, ASTNode],
+    ) -> None:
         self.left = left
         self.operator = operator
         self.right = right
 
     def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        result = f"{indent}OperationNode: {self.operator}\n"
-        result += f"{self.left.to_string(depth + 1)}"
-        result += f"{self.right.to_string(depth + 1)}"
+        result = f"OperationNode: {self.operator}\n"
+        if isinstance(self.left, ASTNode):
+            result += f"{indent} {self.left.to_string(depth + 1)}"
+        else:
+            result += f"{indent} {self.left}\n"
+
+        if isinstance(self.right, ASTNode):
+            result += f"{indent} {self.right.to_string(depth + 1)}"
+        else:
+            result += f"{indent} {self.right}\n"
         return result
