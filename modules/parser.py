@@ -9,47 +9,48 @@ from .ast import (
     IncrementNode,
     ProgramNode,
 )
-from .lexer import tokens
-
-_ = tokens
+from .lexer import Lexer
 
 
-def p_program(p: Any) -> None:
-    """
-    program : statement
-            | statement program
-    """
-    if len(p) == 2:
-        p[0] = ProgramNode([p[1]])
-    else:
-        p[0] = ProgramNode([p[1]] + p[2].statements)
+class Parser:
+    def __init__(self, lexer: Lexer) -> None:
+        self.lexer = lexer
+        self.tokens = lexer.tokens
+        self.parser = yacc.yacc(module=self)
 
+    def parse(self, data: str) -> Optional[ProgramNode]:
+        """Parsea el código fuente y retorna el AST."""
+        self.lexer.input(data)
+        return self.parser.parse(lexer=self.lexer.lexer)  # type: ignore
 
-def p_statement_declaration(p: Any) -> None:
-    "statement : INT ID ASSIGN NUMBER SEMICOLON"
-    p[0] = DeclarationNode("int", p[2], p[4])
+    def p_program(self, p: Any) -> None:
+        """
+        program : statement
+                | statement program
+        """
+        if len(p) == 2:
+            p[0] = ProgramNode([p[1]])
+        else:
+            p[0] = ProgramNode([p[1]] + p[2].statements)
 
+    def p_statement_declaration(self, p: Any) -> None:
+        "statement : INT ID ASSIGN NUMBER SEMICOLON"
+        p[0] = DeclarationNode("int", p[2], p[4])
 
-def p_statement_if(p: Any) -> None:
-    "statement : IF LPAREN condition RPAREN LBRACE program RBRACE"
-    p[0] = IfNode(p[3], p[6])
+    def p_statement_if(self, p: Any) -> None:
+        "statement : IF LPAREN condition RPAREN LBRACE program RBRACE"
+        p[0] = IfNode(p[3], p[6])
 
+    def p_condition(self, p: Any) -> None:
+        "condition : ID LT NUMBER"
+        p[0] = ConditionNode(p[1], "<", p[3])
 
-def p_condition(p: Any) -> None:
-    "condition : ID LT NUMBER"
-    p[0] = ConditionNode(p[1], "<", p[3])
+    def p_statement_increment(self, p: Any) -> None:
+        "statement : ID INCREMENT SEMICOLON"
+        p[0] = IncrementNode(p[1])
 
-
-def p_statement_increment(p: Any) -> None:
-    "statement : ID INCREMENT SEMICOLON"
-    p[0] = IncrementNode(p[1])
-
-
-def p_error(p: Optional[Any]) -> None:
-    if p:
-        print(f"Syntax error at '{p.value}'")
-    else:
-        print("Syntax error at EOF")
-
-
-parser = yacc.yacc()
+    def p_error(self, p: Optional[Any]) -> None:
+        if p:
+            print(f"Syntax error at '{p.value}'")
+        else:
+            print("Syntax error at EOF")
