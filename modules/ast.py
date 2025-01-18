@@ -50,14 +50,23 @@ class IfNode(ASTNode):
 
 
 class ConditionNode(ASTNode):
-    def __init__(self, left: str, operator: str, right: int) -> None:
+    def __init__(self, left: ASTNode, operator: str, right: ASTNode) -> None:
         self.left = left
         self.operator = operator
         self.right = right
 
     def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        return f"{indent}ConditionNode: {self.left} {self.operator} {self.right}\n"
+        result = f"{indent}ConditionNode: {self.operator}\n"
+        if isinstance(self.left, ASTNode):
+            result += f"{indent}  {self.left.to_string(depth + 1)}"
+        else:
+            result += f"{indent}  {self.left}\n"
+        if isinstance(self.right, ASTNode):
+            result += f"{indent}  {self.right.to_string(depth + 1)}"
+        else:
+            result += f"{indent}  {self.right}\n"
+        return result
 
 
 class IncrementNode(ASTNode):

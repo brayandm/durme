@@ -35,7 +35,18 @@ class Transpiler:
         return f"if ({condition}) {{\n{body}\n}}"
 
     def transpile_conditionnode(self, node: ConditionNode) -> str:
-        return f"{node.left} {node.operator} {node.right}"
+        if isinstance(node.left, ASTNode):
+            left = self.transpile(node.left)
+        else:
+            left = str(node.left)
+
+        if isinstance(node.right, ASTNode):
+            right = self.transpile(node.right)
+        else:
+            right = str(node.right)
+
+        operator = node.operator
+        return f"({left} {operator} {right})"
 
     def transpile_incrementnode(self, node: IncrementNode) -> str:
         return f"{node.var_name}++;"
