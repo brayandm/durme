@@ -5,8 +5,15 @@ name = "pypi"
 
 [packages]
 ply = "*"
+pytest = "*"
 
 [dev-packages]
+flake8 = "*"
+black = "*"
+isort = "*"
+mypy = "*"
+pre-commit = "*"
+setuptools = "*"
 
 [requires]
 python_version = "3.12"
