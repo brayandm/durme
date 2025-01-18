@@ -1,4 +1,6 @@
 parser.out
 parsetab.py
 *__pycache__/
-debug/
+src/build/code.cpp
+src/debug/
+src/code.dm

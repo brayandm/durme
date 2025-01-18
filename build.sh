@@ -1,0 +1,1 @@
+python3 main.py ./src/code.dm ./src/build/code.cpp --debug="./src/debug"
