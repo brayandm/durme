@@ -9,6 +9,9 @@ from .ast import (
     IncrementNode,
     ProgramNode,
 )
+from .lexer import tokens
+
+_ = tokens
 
 
 def p_program(p: Any) -> None:

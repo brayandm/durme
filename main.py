@@ -1,5 +1,5 @@
-from .modules.parser import parser  # type: ignore
-from .modules.transpiler import transpile_ast  # type: ignore
+from modules.parser import parser  # type: ignore
+from modules.transpiler import transpile_ast  # type: ignore
 
 if __name__ == "__main__":
     input_code = """
