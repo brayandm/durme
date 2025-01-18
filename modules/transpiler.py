@@ -15,7 +15,8 @@ class Transpiler:
         return method(node)
 
     def transpile_programnode(self, node: ProgramNode) -> str:
-        return "\n".join(self.transpile(stmt) for stmt in node.statements)
+        code = "\n".join(self.transpile(stmt) for stmt in node.statements)
+        return "int main() {\n" + code + "\n return 0;\n}"
 
     def transpile_declarationnode(self, node: DeclarationNode) -> str:
         return f"{node.var_type} {node.var_name} = {node.value};"
