@@ -21,7 +21,7 @@ if __name__ == "__main__":
     else:
         print("AST: generated successfully.")
         with open("debug/ast.out", "w") as ast_file:
-            ast_file.write(str(ast))
+            ast_file.write(ast.to_string())
 
     transpiler = Transpiler()
     cpp_code = transpiler.transpile(ast)

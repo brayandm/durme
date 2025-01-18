@@ -2,8 +2,8 @@ from typing import List
 
 
 class ASTNode:
-    def print(self, depth: int = 0) -> None:
-        """Print the node and its children."""
+    def to_string(self, depth: int = 0) -> str:
+        """Return a string representation of the node."""
         raise NotImplementedError
 
 
@@ -11,11 +11,12 @@ class ProgramNode(ASTNode):
     def __init__(self, statements: List[ASTNode]) -> None:
         self.statements = statements
 
-    def print(self, depth: int = 0) -> None:
+    def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        print(f"{indent}ProgramNode:")
+        result = f"{indent}ProgramNode:\n"
         for stmt in self.statements:
-            stmt.print(depth + 1)
+            result += stmt.to_string(depth + 1)
+        return result
 
 
 class DeclarationNode(ASTNode):
@@ -24,11 +25,9 @@ class DeclarationNode(ASTNode):
         self.var_name = var_name
         self.value = value
 
-    def print(self, depth: int = 0) -> None:
+    def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        print(
-            f"{indent}DeclarationNode: {self.var_type} {self.var_name} = {self.value}"
-        )
+        return f"{indent}DeclarationNode: {self.var_type} {self.var_name} = {self.value}\n"
 
 
 class IfNode(ASTNode):
@@ -36,13 +35,14 @@ class IfNode(ASTNode):
         self.condition = condition
         self.body = body
 
-    def print(self, depth: int = 0) -> None:
+    def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        print(f"{indent}IfNode:")
-        print(f"{indent}  Condition:")
-        self.condition.print(depth + 2)
-        print(f"{indent}  Body:")
-        self.body.print(depth + 2)
+        result = f"{indent}IfNode:\n"
+        result += (
+            f"{indent}  Condition:\n{self.condition.to_string(depth + 2)}"
+        )
+        result += f"{indent}  Body:\n{self.body.to_string(depth + 2)}"
+        return result
 
 
 class ConditionNode(ASTNode):
@@ -51,17 +51,15 @@ class ConditionNode(ASTNode):
         self.operator = operator
         self.right = right
 
-    def print(self, depth: int = 0) -> None:
+    def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        print(
-            f"{indent}ConditionNode: {self.left} {self.operator} {self.right}"
-        )
+        return f"{indent}ConditionNode: {self.left} {self.operator} {self.right}\n"
 
 
 class IncrementNode(ASTNode):
     def __init__(self, var_name: str) -> None:
         self.var_name = var_name
 
-    def print(self, depth: int = 0) -> None:
+    def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
-        print(f"{indent}IncrementNode: {self.var_name}++")
+        return f"{indent}IncrementNode: {self.var_name}++\n"
