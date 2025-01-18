@@ -1,5 +1,5 @@
 from modules.parser import parser  # type: ignore
-from modules.transpiler import transpile_ast  # type: ignore
+from modules.transpiler import Transpiler  # type: ignore
 
 if __name__ == "__main__":
     input_code = """
@@ -9,6 +9,7 @@ if __name__ == "__main__":
     }
     """
     ast = parser.parse(input_code)
-    cpp_code = transpile_ast(ast)
+    transpiler = Transpiler()
+    cpp_code = transpiler.transpile(ast)
     print("Generated C++ code:")
     print(cpp_code)
