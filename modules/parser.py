@@ -19,7 +19,7 @@ class Parser:
         self.parser = yacc.yacc(module=self)
 
     def parse(self, data: str) -> Optional[ProgramNode]:
-        """Parsea el código fuente y retorna el AST."""
+        """Parse the input data and return the AST."""
         self.lexer.input(data)
         return self.parser.parse(lexer=self.lexer.lexer)  # type: ignore
 
