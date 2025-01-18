@@ -63,3 +63,12 @@ class IncrementNode(ASTNode):
     def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
         return f"{indent}IncrementNode: {self.var_name}++\n"
+
+
+class PrintNode(ASTNode):
+    def __init__(self, var_name: str) -> None:
+        self.var_name = var_name
+
+    def to_string(self, depth: int = 0) -> str:
+        indent = "  " * depth
+        return f"{indent}PrintNode: print({self.var_name})\n"

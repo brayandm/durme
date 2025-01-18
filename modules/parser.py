@@ -7,6 +7,7 @@ from .ast import (
     DeclarationNode,
     IfNode,
     IncrementNode,
+    PrintNode,
     ProgramNode,
 )
 from .lexer import Lexer
@@ -44,6 +45,10 @@ class Parser:
     def p_condition(self, p: Any) -> None:
         "condition : ID LT NUMBER"
         p[0] = ConditionNode(p[1], "<", p[3])
+
+    def p_statement_print(self, p: Any) -> None:
+        "statement : PRINT LPAREN ID RPAREN SEMICOLON"
+        p[0] = PrintNode(p[3])
 
     def p_statement_increment(self, p: Any) -> None:
         "statement : ID INCREMENT SEMICOLON"

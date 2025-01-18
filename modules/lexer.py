@@ -18,8 +18,13 @@ class Lexer:
             "LT",
             "INCREMENT",
             "SEMICOLON",
+            "PRINT",
         ]
-        self.reserved: Dict[str, str] = {"int": "INT", "if": "IF"}
+        self.reserved: Dict[str, str] = {
+            "int": "INT",
+            "if": "IF",
+            "print": "PRINT",
+        }
         self.t_ignore = " \t"
         self.t_ASSIGN = r"="
         self.t_LPAREN = r"\("
