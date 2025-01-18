@@ -3,12 +3,9 @@ from modules.parser import Parser  # type: ignore
 from modules.transpiler import Transpiler  # type: ignore
 
 if __name__ == "__main__":
-    input_code = """
-    int a = 3;
-    if (a < 7) {
-        a++;
-    }
-    """
+    with open("code.dm", "r") as file:
+        input_code = file.read()
+
     lexer = Lexer()
     lexer.input(input_code)
     lexer.save_tokens("debug/tokens.out")
@@ -27,4 +24,5 @@ if __name__ == "__main__":
     cpp_code = transpiler.transpile(ast)
 
     print("Generated C++ code:")
-    print(cpp_code)
+    with open("code.cpp", "w") as cpp_file:
+        cpp_file.write(cpp_code)
