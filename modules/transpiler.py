@@ -23,7 +23,9 @@ class Transpiler:
         )
 
     def transpile_declarationnode(self, node: DeclarationNode) -> str:
-        return f"{node.var_type} {node.var_name} = {node.value};"
+        return (
+            f"{node.var_type} {node.var_name} = {self.transpile(node.value)};"
+        )
 
     def transpile_ifnode(self, node: IfNode) -> str:
         condition = self.transpile(node.condition)
@@ -53,9 +55,7 @@ class Transpiler:
             right = str(node.right)
 
         operator = node.operator
-        print(left, operator, right)
-        return ""
-        return f"{left} {operator} {right};"
+        return f"({left} {operator} {right})"
 
     def unsupported_node(self, node: ASTNode) -> str:
         raise ValueError(f"Unsupported AST node type: {type(node)}")
