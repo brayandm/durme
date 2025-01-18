@@ -57,7 +57,7 @@ class Lexer:
         return self.lexer.token()
 
     def save_tokens(self, output_file: str) -> None:
-        """Guarda los tokens generados en un archivo."""
+        """Save the tokens to a file."""
         with open(output_file, "w") as f:
             while token := self.token():
                 f.write(f"{token}\n")
