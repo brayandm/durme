@@ -4,6 +4,7 @@ from .ast import (
     DeclarationNode,
     IfNode,
     IncrementNode,
+    OperationNode,
     PrintNode,
     ProgramNode,
 )
@@ -39,6 +40,12 @@ class Transpiler:
 
     def transpile_printnode(self, node: PrintNode) -> str:
         return f"std::cout << {node.var_name} << std::endl;"
+
+    def transpile_operationnode(self, node: OperationNode) -> str:
+        left = self.transpile(node.left)
+        right = self.transpile(node.right)
+        operator = node.operator
+        return f"{left} {operator} {right};"
 
     def unsupported_node(self, node: ASTNode) -> str:
         raise ValueError(f"Unsupported AST node type: {type(node)}")

@@ -7,6 +7,7 @@ from .ast import (
     DeclarationNode,
     IfNode,
     IncrementNode,
+    OperationNode,
     PrintNode,
     ProgramNode,
 )
@@ -35,7 +36,7 @@ class Parser:
             p[0] = ProgramNode([p[1]] + p[2].statements)
 
     def p_statement_declaration(self, p: Any) -> None:
-        "statement : INT ID ASSIGN NUMBER SEMICOLON"
+        "statement : INT ID ASSIGN expression SEMICOLON"
         p[0] = DeclarationNode("int", p[2], p[4])
 
     def p_statement_if(self, p: Any) -> None:
@@ -43,16 +44,55 @@ class Parser:
         p[0] = IfNode(p[3], p[6])
 
     def p_condition(self, p: Any) -> None:
-        "condition : ID LT NUMBER"
+        "condition : expression LT expression"
         p[0] = ConditionNode(p[1], "<", p[3])
 
     def p_statement_print(self, p: Any) -> None:
-        "statement : PRINT LPAREN ID RPAREN SEMICOLON"
+        "statement : PRINT LPAREN expression RPAREN SEMICOLON"
         p[0] = PrintNode(p[3])
 
     def p_statement_increment(self, p: Any) -> None:
         "statement : ID INCREMENT SEMICOLON"
         p[0] = IncrementNode(p[1])
+
+    def p_expression(self, p: Any) -> None:
+        """
+        expression : expression ADD term
+                   | expression SUB term
+                   | term
+        """
+        if len(p) == 4:
+            if p[2] == "+":
+                p[0] = OperationNode(p[1], "+", p[3])
+            elif p[2] == "-":
+                p[0] = OperationNode(p[1], "-", p[3])
+        else:
+            p[0] = p[1]
+
+    def p_term(self, p: Any) -> None:
+        """
+        term : term MUL factor
+             | term DIV factor
+             | factor
+        """
+        if len(p) == 4:
+            if p[2] == "*":
+                p[0] = OperationNode(p[1], "*", p[3])
+            elif p[2] == "/":
+                p[0] = OperationNode(p[1], "/", p[3])
+        else:
+            p[0] = p[1]
+
+    def p_factor(self, p: Any) -> None:
+        """
+        factor : LPAREN expression RPAREN
+               | NUMBER
+               | ID
+        """
+        if len(p) == 4:
+            p[0] = p[2]
+        else:
+            p[0] = p[1]
 
     def p_error(self, p: Optional[Any]) -> None:
         if p:

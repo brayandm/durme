@@ -72,3 +72,17 @@ class PrintNode(ASTNode):
     def to_string(self, depth: int = 0) -> str:
         indent = "  " * depth
         return f"{indent}PrintNode: print({self.var_name})\n"
+
+
+class OperationNode(ASTNode):
+    def __init__(self, left: ASTNode, operator: str, right: ASTNode) -> None:
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def to_string(self, depth: int = 0) -> str:
+        indent = "  " * depth
+        result = f"{indent}OperationNode: {self.operator}\n"
+        result += f"{self.left.to_string(depth + 1)}"
+        result += f"{self.right.to_string(depth + 1)}"
+        return result

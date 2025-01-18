@@ -18,6 +18,10 @@ class Lexer:
             "LT",
             "INCREMENT",
             "SEMICOLON",
+            "ADD",
+            "SUB",
+            "MUL",
+            "DIV",
             "PRINT",
         ]
         self.reserved: Dict[str, str] = {
@@ -34,6 +38,10 @@ class Lexer:
         self.t_LT = r"<"
         self.t_INCREMENT = r"\+\+"
         self.t_SEMICOLON = r";"
+        self.t_ADD = r"\+"
+        self.t_SUB = r"-"
+        self.t_MUL = r"\*"
+        self.t_DIV = r"/"
 
         self.lexer = lex.lex(module=self)
 
