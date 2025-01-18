@@ -10,6 +10,9 @@ if __name__ == "__main__":
     }
     """
     lexer = Lexer()
+    lexer.input(input_code)
+    lexer.save_tokens("debug/tokens.out")
+
     parser = Parser(lexer)
     ast = parser.parse(input_code)
 
@@ -17,6 +20,8 @@ if __name__ == "__main__":
         raise Exception("Error: The analysis process failed.")
     else:
         print("AST: generated successfully.")
+        with open("debug/ast.out", "w") as ast_file:
+            ast_file.write(str(ast))
 
     transpiler = Transpiler()
     cpp_code = transpiler.transpile(ast)
